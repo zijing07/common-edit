@@ -16,10 +16,11 @@ socket.on('connect', function() {
 	var msg = CKEDITOR.instances.doc.getData();
 	var patches = dmp.patch_make(msg, diff);
 	var text = dmp.patch_apply(patches, msg);
+	var final_text = text[0].replace(/(<p>)?([,-]*[01],*)+(<\/p>)?\s*/g, "");
 	if (DEBUG) {
-	    console.log("Apply changes from " + msg + " to " + text[0]);
+	    console.log("Apply changes from " + msg + " to " + final_text);
 	}
-	CKEDITOR.instances.doc.setData(text[0]);
+	CKEDITOR.instances.doc.setData(final_text);
 	origin_data = text[0];
     });
 });
