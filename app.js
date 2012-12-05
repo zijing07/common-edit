@@ -22,15 +22,22 @@ app.configure(function(){
 
 app.get('/', routes.index);
 
-io.sockets.on('connection', function (socket) {
-    socket.on('broadcast', function(data) {
-	console.log('broadcast message: ' + data.msg);
-	socket.broadcast.emit('coming');
-	socket.broadcast.json.send({data: data.msg});
+var chat = io.of('/chat');
+chat.on('connection', function(socket) {
+    console.log("Connection to chat");
+
+    socket.on("message", function(msg) {
+	console.log("Message received on chat: " + msg);
+	socket.broadcast.send('hi all chat mem');
     });
+});
+
+/*
+io.sockets.on('connection', function (socket) {
 
     socket.on("message", function(msg) {
 	console.log("Message received: " + msg);
 	socket.broadcast.send(msg);
     });
 });
+*/
