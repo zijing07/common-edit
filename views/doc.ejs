@@ -11,9 +11,10 @@
   <body>
     <h1><%= title %></h1>
     <p>Welcome to <%= title %></p>
+    <p>Author: <%= user_id %></p>
     <div id="doc" contenteditable="true" onkeydown="handle_text()">
-      Test
+      <%= doc_data %>
     </div>
-    <p id="diff_string"></p>
+    <p id="plain_text"></p>
   </body>
 </html>
