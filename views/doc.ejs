@@ -6,15 +6,20 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="/ckeditor/ckeditor.js"></script>
     <script src="/diff/javascript/diff_match_patch_uncompressed.js"></script>
-    <script src="/javascripts/main.js"></script>
   </head>
   <body>
     <h1><%= title %></h1>
     <p>Welcome to <%= title %></p>
-    <p>Author: <%= user_id %></p>
-    <div id="doc" contenteditable="true" onkeydown="handle_text()">
+    <p id='user_id' style="display:none"><%= user_id %></p>
+    <p id='doc_id' style='display:none'><%= doc_id %></p>
+    <p id='user_name'><%= user_name %></p>
+    <script src="/javascripts/main.js"></script>
+
+    <div id="doc" contenteditable="true" onkeydown="handle_text(event)">
       <%= doc_data %>
     </div>
-    <p id="plain_text"></p>
+    <button id="save" onclick="save_doc()">Save</button>
+    <p>Online user list (ip : port : user_name):</p>
+    <p id='user_list'></p>
   </body>
 </html>
