@@ -1,4 +1,4 @@
-var DEBUG = true;
+var DEBUG = false;
 
 var express = require('express')
 , app = express()
@@ -39,6 +39,9 @@ function getUserNameFromDB(user_id) {
 
 function saveDocData(data) {
     // TODO: mongo db logic
+    if (DEBUG) {
+	console.log('Save data: ' + data);
+    }
 }
 
 app.get('/doc/:doc_id', function(req, res) {
@@ -99,8 +102,11 @@ function new_doc_socket(doc_id) {
 	});
 
 	socket.on('save_doc_data', function (data) {
+	    if (DEBUG) {
+		console.log('SOCKET save doc data: ' + data);
+	    }
 	    saveDocData(data.doc_data);
-	}
+	});
 
 	socket.on('disconnect', function() {
 	    removeOnlineUser(users, socket.handshake.address, user_name);

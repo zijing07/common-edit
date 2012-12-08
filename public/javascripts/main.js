@@ -1,4 +1,4 @@
-var DEBUG = true;
+var DEBUG = false;
 
 var doc_url = '/doc/' + document.getElementById('doc_id').innerHTML;
 var doc_socket = io.connect(doc_url);
@@ -53,13 +53,14 @@ function set_editor_data(final_text) {
     range.select();
 }
 
+var MENU_KEY_CODE = -7;
 function handle_text(event) {
     var key_code = event.keyCode;
     if ((key_code >= 65 && key_code <= 90) ||
 	(key_code >= 48 && key_code <= 57) ||
 	(key_code >= 186 && key_code <= 192) ||
 	(key_code >= 219 && key_code <= 222) ||
-	key_code == 8 || key_code == 32) {
+	key_code == 8 || key_code == 32 || key_code == MENU_KEY_CODE) {
 	var text = CKEDITOR.instances.doc.getData();
 	var diff = dmp.diff_main(origin_data, text);
 
@@ -79,7 +80,10 @@ function update_user_list(users) {
 }
 
 function save_doc() {
-    doc_socket.emit('save_doc_data', {doc_data, CKEDITOR.instances.doc.getData()});
+    if (DEBUG) {
+	console.log('save doc data');
+    }
+    doc_socket.emit('save_doc_data', {doc_data: CKEDITOR.instances.doc.getData()});
 }
 
 /***********************************************
@@ -117,5 +121,11 @@ doc_socket.on('message', function(diff) {
 });
 
 window.onload = function() {
-    origin_data = CKEDITOR.instances.doc.getData();
+    editor = CKEDITOR.instances.doc;
+    origin_data = editor.getData();
+
+    // Editor menu operations
+    editor.on('afterCommandExec', function(e) {
+	handle_text(MENU_KEY_CODE);
+    });
 };
